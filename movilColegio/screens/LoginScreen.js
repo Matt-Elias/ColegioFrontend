@@ -40,12 +40,6 @@ const LoginScreen = ({ navigation }) => {
     } catch (error) {
       console.error("Error completo:", error);
       Alert.alert("Error", error.message || "Ocurrió un error al iniciar sesión");
-      /*Alert.alert(
-        "Error", 
-        error.response?.data?.message || 
-        error.message || 
-        "Ocurrió un error al iniciar sesión"
-      );*/
     } finally {
       setEstaCargando(false);
     }

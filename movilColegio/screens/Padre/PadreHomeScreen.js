@@ -7,7 +7,7 @@ const PadreHomeScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>🏠 Bienvenido Padre</Text>
+      <Text style={styles.text}> Bienvenido Padre</Text>
 
       <TouchableOpacity style={styles.button} onPress={logout}>
         <Text style={styles.buttonText}>Cerrar Sesión</Text>

@@ -1,11 +1,12 @@
 import { View, Text, StyleSheet } from "react-native";
 
-const DatosEstudianteScreen = () => (
-  <View style={styles.container}>
-    
-    
-  </View>
-);
+const DatosEstudianteScreen = () => {
+  return (
+    <View style={styles.container}>
+  
+    </View>
+  );
+}
 
 const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: "center", alignItems: "center" },

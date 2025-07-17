@@ -6,7 +6,7 @@ import LoginScreen from "../screens/LoginScreen";
 import AdminNavigator from "../navigation/AdminNavigator";
 import PadreNavigator from "../navigation/PadreNavigator";
 import ProfeNavigator from "../navigation/ProfeNavigator";
-import { ActivityIndicator } from "react-native-web";
+import { ActivityIndicator } from "react-native";
 
 const Stack = createNativeStackNavigator();
 

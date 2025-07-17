@@ -1,6 +1,5 @@
 import { createContext, useState, useContext, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import authService from "../services/authService";
 
 export const AuthContext = createContext();
 
@@ -55,12 +54,9 @@ export const AuthProvider = ({ children }) => {
   const login = async (userData, navigation) => {
     try {
       console.log("Iniciando login en AuthContext con:", userData);
-      //const result = await authService.login(credentials); // Asegúrate que esto llame a tu authService.login
 
       // Guarda los datos en AsyncStorage
       await AsyncStorage.multiSet([
-        //["token", userData.data.token],
-        //["role", userData.data.role], // Asegúrate que el rol esté incluido
         ["token", userData.token], // Ahora accedemos directamente a userData.token
         ["role", userData.role],
         ["correoElectronico", userData.correoElectronico],

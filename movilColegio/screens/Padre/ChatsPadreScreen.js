@@ -1,11 +1,13 @@
 import { View, Text, StyleSheet } from "react-native";
 
-const ChatsPadreScreen = () => (
-  <View style={styles.container}>
+const ChatsPadreScreen = () => {
+  return (
+    <View style={styles.container}>
     
     
-  </View>
-);
+    </View>
+  );
+}
 
 const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: "center", alignItems: "center" },
