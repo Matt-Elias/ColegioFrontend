@@ -68,13 +68,14 @@ export const AuthProvider = ({ children }) => {
       console.log("Usuario establecido:", userData);
 
       // Redirige basado en el rol
-      redirectBasedOnRole(userData.role, navigation);
+      //redirectBasedOnRole(userData.role, navigation);
     } catch (error) {
       console.error("Error en login:", error);
       throw error;
     }
   };
 
+  {/**
   const redirectBasedOnRole = (role, navigation) => {
     switch (role?.toUpperCase()) {
       case "ADMINISTRADOR":
@@ -90,6 +91,7 @@ export const AuthProvider = ({ children }) => {
         navigation.replace("Login");
     }
   };
+    */}
 
   return (
     <AuthContext.Provider value={{ user, estaCargando, login, logout, cargarUsuarioData }}>
