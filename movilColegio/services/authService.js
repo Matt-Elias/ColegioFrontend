@@ -3,11 +3,11 @@ import axios from "axios";
 const API_URL = "http://192.168.1.93:8080";
 //20233tn100@utez.edu.mx
 
-//padreEn@gmail.com
-//encriptado
+//salsa@gmail.com
+//salsa
 
-//profeEn@gmail.com
-//profeEnc
+//nuevoProf@gmail.com
+//nuevo
 
 // Exporta un objeto con todas las funciones
 const authService = {

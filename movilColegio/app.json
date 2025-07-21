@@ -17,8 +17,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./img/LogoColegio.png",
+        "backgroundColor": "#172554"
       },
       "edgeToEdgeEnabled": true
     },

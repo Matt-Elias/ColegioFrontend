@@ -5,12 +5,12 @@ import authService from '../services/authService'; // Adjust the path as needed
 
 const LoginScreen = ({ navigation }) => {
   const { login: authLogin } = useContext(AuthContext); // Renombrado para evitar conflicto
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [correoElectronico, setCorreoElectronico] = useState("");
+  const [contrasena, setContrasena] = useState("");
   const [estaCargando, setEstaCargando] = useState(false);
 
   const manejarLogin = async () => {
-    if (!username || !password) {
+    if (!correoElectronico || !contrasena) {
       Alert.alert("Error", "Por favor ingresa usuario y contraseña");
       return;
     }
@@ -19,8 +19,8 @@ const LoginScreen = ({ navigation }) => {
     try {
       console.log("Iniciando login...");
       const result = await authService.login({
-        correoElectronico: username,
-        contrasena: password
+        correoElectronico: correoElectronico,
+        contrasena: contrasena
       });
 
       console.log("Resultado del login:", result);
@@ -56,32 +56,40 @@ const LoginScreen = ({ navigation }) => {
   };
 
   return (
-    <View className="bg-blue-950 h-full py-3 px-20 gap-10">
-      <Image source={require('../img/LogoColegio.png')} style={styles.image} className="" />
+    <View className="bg-blue-950 h-full py-3 px-20 gap-6">
+      <Image source={require('../img/LogoColegio.png')} style={styles.image} />
 
       <Text className="text-3xl font-bold text-white mb-4 text-center">
         Bienvenido
       </Text>
 
-      <TextInput
-        className= "bg-gray-500 text-white block w-full rounded-lg py-3 px-4" 
-        placeholder="Usuario"
-        autoCapitalize="none"
-        onChangeText={setUsername}
-        value={username}
-      />
+      <View className="gap-1">
+        <Text className="text-gray-300 text-lg font-semibold">Correo Electronico</Text>
 
-      <TextInput
-        className= "bg-gray-500 text-white block w-full rounded-lg py-3 px-4"
-        placeholder="Contraseña"
-        secureTextEntry
-        onChangeText={setPassword}
-        value={password }
-      />
+        <TextInput
+          className= "bg-gray-400 text-white block w-full rounded-lg py-3 px-3" 
+          placeholder="Correo eletronico"
+          autoCapitalize="none"
+          onChangeText={setCorreoElectronico}
+          value={correoElectronico}
+        />
+      </View>
 
-      <View className="gap-10">
+      <View className="gap-1">
+        <Text className="text-gray-300 text-lg font-semibold">Contraseña</Text>
+
+        <TextInput
+          className= "bg-gray-400 text-white block w-full rounded-lg py-3 px-3"
+          placeholder="Contraseña"
+          secureTextEntry
+          onChangeText={setContrasena}
+          value={contrasena}
+        />
+      </View>
+
+      <View className="gap-1">
         <TouchableOpacity className="bg-blue-600 rounded-lg py-3" onPress={manejarLogin} disabled={estaCargando}>
-          <Text className="text-white text-center">
+          <Text className="text-white text-center text-lg">
             {estaCargando ? "Cargando..." : "Iniciar Sesión"}
           </Text>
         </TouchableOpacity>
@@ -89,7 +97,6 @@ const LoginScreen = ({ navigation }) => {
 
     </View>
   );
-
 }
 
 export default LoginScreen;
