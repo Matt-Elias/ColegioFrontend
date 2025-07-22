@@ -2,21 +2,27 @@ import axios from "axios";
 const API_URL = "http://192.168.1.93:8080";
 
 const asistenciaService = {
-  getDatosAsistencia: async (token) => {
+  registrarDatosAsistencia: async (token, registroData) => {
     try {
       console.log("[asistenciaService] Token recibido:", token);
+      console.log("[asistenciaService] Datos de registro:", registroData);
 
       if (!token) {
         throw new Error('Token no proporcionado');
       }
-
-      const response = await axios.get(`${API_URL}/registroAsistencia/listadoAsistencia`, {
-        headers: { 
-          Authorization: `Bearer ${token}`,
-          Accept: 'application/json'
-        },
-        validateStatus: (status) => status < 500
-      });
+      
+      const response = await axios.post(
+        `${API_URL}/registroAsistencia/crearAsistencia`, 
+        registroData,
+        {
+          headers: { 
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          },
+          validateStatus: (status) => status < 500
+        }
+      );
       
       console.log("[asistenciaService] Respuesta completa:", response);
       
@@ -26,14 +32,16 @@ const asistenciaService = {
       if (response.status !== 200) {
         throw new Error(response.data?.message || `Error ${response.status}: ${response.statusText}`);
       }
-      if (!response.data?.result?.[0]) {
+      
+      // Modificación aquí - la respuesta no viene en un array [0]
+      if (!response.data?.result) {
         throw new Error('La respuesta no contiene datos de la asistencia');
       }
       
       return {
         success: true,
-        data: response.data.result[0],
-        message: response.data.text
+        data: response.data.result, // Cambiado de result[0] a result
+        message: response.data.text || 'Asistencia registrada correctamente'
       };
     } catch (error) {
       console.error("[asistenciaService] Error detallado:", error.response?.data || error.message);
@@ -46,15 +54,14 @@ const asistenciaService = {
     }
   },
 
-  postDatosAsistencia: async (token) => {
+  getDatosAsistencia: async (token) => {
     try {
       console.log("[asistenciaService] Token recibido:", token);
 
       if (!token) {
         throw new Error('Token no proporcionado');
       }
-
-      const response = await axios.post(`${API_URL}/registroAsistencia/crearAsistencia`, {
+      const response = await axios.get(`${API_URL}/registroAsistencia/listadoAsistencia`, {
         headers: { 
           Authorization: `Bearer ${token}`,
           Accept: 'application/json'
@@ -63,20 +70,21 @@ const asistenciaService = {
       });
       
       console.log("[asistenciaService] Respuesta completa:", response);
-      
       if (response.status === 401) {
         throw new Error('No autorizado - Token inválido o expirado');
       }
       if (response.status !== 200) {
         throw new Error(response.data?.message || `Error ${response.status}: ${response.statusText}`);
       }
-      if (!response.data?.result?.[0]) {
+      
+      // Modificación aquí - la respuesta no viene en un array [0]
+      if (!response.data?.result) {
         throw new Error('La respuesta no contiene datos de la asistencia');
       }
       
       return {
         success: true,
-        data: response.data.result[0],
+        data: response.data.result, // Cambiado de result[0] a result
         message: response.data.text
       };
     } catch (error) {
@@ -89,7 +97,6 @@ const asistenciaService = {
       };
     }
   }
-
 };
 
 export default asistenciaService;
