@@ -29,7 +29,7 @@ const profesorService = {
       }
       
       if (!response.data?.result?.[0]) {
-        throw new Error('La respuesta no contiene datos del padre');
+        throw new Error('La respuesta no contiene datos del profesor');
       }
       
       return {

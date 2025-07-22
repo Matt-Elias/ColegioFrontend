@@ -8,7 +8,7 @@ const Drawer = createDrawerNavigator();
 const AdminNavigator = () => (
   <Drawer.Navigator>
     <Drawer.Screen name="AdminHome" component={AdminHomeScreen} options={{drawerIcon: ({color, size}) => (<Ionicons name="home-outline" size={size} color={color} />) }} />
-    <Drawer.Screen name="DatosEstudiante" component={DatosEstudianteScreen} options={{drawerIcon: ({color, size}) => (<Ionicons name="clipboard-outline" size={size} color={color} />) }} />
+    <Drawer.Screen name="Historial" component={DatosEstudianteScreen} options={{drawerIcon: ({color, size}) => (<Ionicons name="clipboard-outline" size={size} color={color} />) }} />
   </Drawer.Navigator>
 );
 

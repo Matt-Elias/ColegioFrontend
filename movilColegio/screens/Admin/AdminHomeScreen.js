@@ -3,34 +3,21 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { Ionicons } from '@expo/vector-icons';
 import QRReader from "../../components/QRReader";
-import estudianteService from "../../services/estudianteService";
 
 const AdminHomeScreen = () => {
-  const { logout, userToken } = useContext(AuthContext);
+  const { logout, user } = useContext(AuthContext);  // En lugar de userToken
   const [mostrarEscaner, setMostrarEscaner] = useState(false);
   const [estudianteData, setEstudianteData] = useState(null);
-  const [apiData, setApiData] = useState(null);
 
   const manejarEscaner = async (qrData) => {
     setMostrarEscaner(false);
     setEstudianteData(qrData);
 
-    try {
-      const result = await estudianteService.getDatosEstudiante(
-        userToken,
-        qrData.estudiante.matricula
-      );
-
-      if (result.success) {
-        setApiData(result.data);
-      } else {
-        Alert.alert("Error", result.message || "No se pudo obtener información adicional");
-      }
-
-    } catch (error) {
-      console.error("Error al obtener datos del estudiante:", error);
-      Alert.alert("Error", "Ocurrió un error al consultar los datos del estudiante");
+    if (!user?.token || !qrData?.estudiante?.matricula) {
+      console.warn("Faltan parámetros requeridos");
+      return;
     }
+
   };
 
   return (
@@ -43,17 +30,17 @@ const AdminHomeScreen = () => {
             </View>
             
             <View className="">
-              <TouchableOpacity className="py-3 px-3 bg-slate-300 border border-slate-300 rounded-lg"
+              <TouchableOpacity className="py-3 px-3 bg-slate-500 border border-slate-200 rounded-lg"
                 onPress={()=> setMostrarEscaner(true)}
               >
-                <Ionicons name="qr-code-outline" size={18} color="black" />
+                <Ionicons name="qr-code-outline" size={18} color="white" />
               </TouchableOpacity>
             </View>
         </View>
 
         {estudianteData && (
           <View className="bg-white p-4 rounded-lg shadow">
-            <Text className="text-xl font-semibold text-center text-gray-700"> Datos del QR:</Text>
+            <Text className="text-xl font-semibold text-left text-gray-700"> Datos del QR:</Text>
 
             {estudianteData.urlImagen && (
               <Image 
@@ -82,15 +69,22 @@ const AdminHomeScreen = () => {
               <Text className="bg-gray-100 block rounded-lg py-2 px-2 text-gray-500 text-lg"> {estudianteData.estudiante.tipo} </Text>
             </View> 
 
-          </View>
-        )}
+            <Text className="text-gray-600 text-lg font-semibold">Asistencia</Text>
 
-        {apiData && (
-           <View className="bg-white p-4 rounded-lg shadow mt-4">      
-            <Text className="text-lg font-bold mb-2">Datos adicionales:</Text>
-            <Text>Grado/Grupo: {apiData.gradoGrupo}</Text>
-            <Text>Nivel Académico: {apiData.nivelAcademico}</Text>
-            <Text>Estado: {apiData.activo}</Text>
+            <View className="flex-row space-x-4 gap-4">
+              <View className="flex-1">
+                <TouchableOpacity className="bg-green-500 py-3 px-4 rounded-lg" >
+                  <Text className="text-white text-base font-bold text-center">Entrada</Text>
+                </TouchableOpacity>
+              </View>
+
+              <View className="flex-1">
+                <TouchableOpacity className="bg-red-500 py-3 px-4 rounded-lg" >
+                  <Text className="text-white text-base font-bold text-center">Salida</Text>
+                </TouchableOpacity>
+              </View>
+            </View> 
+
           </View>
         )}
       
