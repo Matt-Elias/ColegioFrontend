@@ -13,14 +13,24 @@
       "backgroundColor": "#172554"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.movilColegio"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./img/LogoColegio.png",
         "backgroundColor": "#172554"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.POST_NOTIFICATIONS",
+        "android.permission.RECEIVE_BOOT_COMPLETED",
+        "android.permission.VIBRATE",
+        "android.permission.INTERNET"
+      ],
+      "package": "com.anonymous.movilColegio"
     },
     "web": {
       "favicon": "./assets/favicon.png",
@@ -32,7 +42,18 @@
         {
           "cameraPermission": "Necesitamos acceso a tu cámara para escanear códigos QR"
         }
+      ],
+      [
+        "onesignal-expo-plugin",
+        {
+          "mode": "development"
+        }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "342b3d7e-a815-4b88-8496-233cd87dd620"
+      }
+    }
   }
 }
