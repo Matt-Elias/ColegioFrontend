@@ -4,3 +4,24 @@ node_modules/
 dist/ 
 build/ 
 package-lock.json 
+
+# Environment variables (API keys sensibles)
+.env
+.env.local
+.env.*.local
+# Android
+android/.gradle/
+android/.kotlin/
+android/build/
+android/app/build/
+android/local.properties/
+android/.idea/
+android/*.iml
+# VS Code
+.vscode/
+
+# Logs de error
+*.log
+hs_err_pid*.log
+replay_pid*.log
+
