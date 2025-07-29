@@ -1,10 +1,11 @@
 import { View, Text, TouchableOpacity, TextInput, ScrollView, Modal, Image, Alert } from "react-native";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { Ionicons } from '@expo/vector-icons';
 import QRReader from "../../components/QRReader";
 import estudianteService from "../../services/estudianteService";
 import asistenciaService from "../../services/asistenciaService";
+import notificacionService from "../../services/notificacionService";
 
 const AdminHomeScreen = () => {
   const { logout, user } = useContext(AuthContext);  // En lugar de userToken
@@ -12,6 +13,36 @@ const AdminHomeScreen = () => {
   const [estudianteData, setEstudianteData] = useState(null);
   const [apiData, setApiData] = useState(null);
   const [cargando, setCargando] = useState(false);
+
+  useEffect(() => {
+    if (user?.token) {
+      try {
+        const tokenParts = user.token.split('.');
+
+        if (tokenParts.length === 3) {
+          const payload = JSON.parse(atob(tokenParts[1]));
+          const now = Math.floor(Date.now() / 1000);
+          const exp = payload.exp;
+
+          console.log('[DEBUG] Token exp:', new Date(exp * 1000));
+          console.log('[DEBUG] Tiempo actual:', new Date());
+          console.log('[DEBUG] Token válido:', exp > now);
+
+          if (exp <= now) {
+            console.error('[DEBUG] TOKEN EXPIRADO - Cerrando sesión');
+            Alert.alert(
+              'Sesión Expirada',
+              'Tu sesión ha expirado. Serás redirigido al login.',
+              [{ text: 'OK', onPress: () => logout() }]
+            );
+          }
+        }
+
+      } catch (error) {
+        console.error('[DEBUG] Error decodificando token:', error);
+      }
+    }
+  }, [user]);
 
   const manejarEscaner = async (qrData) => {
     setMostrarEscaner(false);
@@ -69,11 +100,65 @@ const AdminHomeScreen = () => {
       );
       
       if (result.success) {
-        Alert.alert("Éxito", "Asistencia registrada correctamente");
+        console.log("[AdminHomeScreen] Asistencia registrada exitosamente");
+
+        // Variable para controlar si ya se mostró un alert
+        let alertMostrado = false;
+
+        try {
+          console.log("[AdminHomeScreen] Enviando notificación...");
+
+          const notificacionData = {
+            idEstudiante: estudianteData.estudiante.idEstudiante,
+            nombreEstudiante: estudianteData.nombreCompleto,
+            tipoRegistro: tipoRegistro,
+            fechaHora: new Date().toISOString()
+          };
+
+          const notificacionResult = await notificacionService.enviarNotificacionAsistencia(
+            user.token,
+            notificacionData
+          );
+
+          if (notificacionResult.success) {
+            console.log("[AdminHomeScreen] Notificación enviada exitosamente");
+
+            Alert.alert(
+              "¡Éxito!", 
+              `Asistencia registrada correctamente.\nNotificación enviada a los padres.`,
+              [{ text: "OK" }]
+            );
+            alertMostrado = true;
+
+          } else {
+              console.warn("[AdminHomeScreen] Error enviando notificación:", notificacionResult.message);
+              
+              Alert.alert(
+                "Parcialmente exitoso", 
+                `Asistencia registrada correctamente.\nAdvertencia: ${notificacionResult.message}`,
+                [{ text: "OK" }]
+              );
+              alertMostrado = true;
+          }
+
+        } catch (error) {
+          console.error("[AdminHomeScreen] Error enviando notificación:", error);
+          
+          Alert.alert(
+            "Parcialmente exitoso", 
+            "Asistencia registrada correctamente.\nNo se pudo enviar la notificación a los padres.",
+            [{ text: "OK" }]
+          );
+          alertMostrado = true;
+        }
+
+        //  Alert.alert("Éxito", "Asistencia registrada correctamente");
         // Limpiar los datos después de registrar
         setEstudianteData(null);
         setApiData(null);
+
       } else {
+        console.error("[AdminHomeScreen] Error registrando asistencia:", result.message);
         Alert.alert("Error", result.message || "No se pudo registrar la asistencia");
       }
 
@@ -81,10 +166,10 @@ const AdminHomeScreen = () => {
       console.error("Error al registrar asistencia:", error);
       Alert.alert("Error", "Ocurrió un error al registrar la asistencia");
     } finally {
-      setLoading(false);
+      setCargando(false);
     }
 
-  }
+  };
 
   return (
     <ScrollView className="bg-blue-400">
@@ -181,7 +266,16 @@ const AdminHomeScreen = () => {
                 </TouchableOpacity>
               </View>
 
-            </View> 
+            </View>
+
+            {cargando && (
+              <View className="mt-3 p-2 bg-blue-50 rounded-lg">
+                <Text className="text-blue-600 text-center">
+                  Registrando asistencia...{"\n"}
+                  Enviando notificación a los padres...
+                </Text>
+              </View>
+            )} 
 
           </View>
         )}

@@ -3,6 +3,9 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import padreService from "../../services/padreService";
 import estudianteService from "../../services/estudianteService";
+import notificacionService from "../../services/notificacionService";
+import useOneSignal from "../../hooks/useOneSignal";
+import { OneSignal } from 'react-native-onesignal';
 
 const PadreHomeScreen = () => {
   const { logout, user } = useContext(AuthContext);
@@ -11,6 +14,64 @@ const PadreHomeScreen = () => {
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
   const [cargarEstudiante, setCargandoEstudiante] = useState(false);
+
+  const { playerId, isReady, subscriptionStatus ,getTokenData } = useOneSignal();
+
+    // En PadreHomeScreen.js después del hook useOneSignal
+    useEffect(() => {
+      if (isReady && user?.idUsuario) {
+        const loginOneSignal = async () => {
+          try {
+            console.log("[PadreHomeScreen] Haciendo login en OneSignal con ID:", user.idUsuario);
+            OneSignal.login(user.idUsuario.toString());
+            
+            console.log("[PadreHomeScreen] Login exitoso en OneSignal ----> ./");
+          } catch (error) {
+            console.error("[PadreHomeScreen] Error en login OneSignal: <----->", error);
+          }
+        };
+        loginOneSignal();
+      }
+    }, [isReady, user?.idUsuario]);
+
+  useEffect(() => {
+    const registrarToken = async () => {
+      // Only proceed if user is actually subscribed
+      if (isReady && playerId && subscriptionStatus === 'Subscribed' && user?.idUsuario && user?.token) {
+        try {
+          console.log("[PadreHomeScreen] Registering OneSignal token...");
+          console.log("[PadreHomeScreen] Subscription status:", subscriptionStatus);
+          
+          const tokenData = getTokenData(user.idUsuario);
+
+          if (tokenData) {
+            const result = await notificacionService.registrarDispositivoToken(
+              user.token,
+              tokenData
+            );
+            
+            if (result.success) {
+              console.log("[PadreHomeScreen] Token registered successfully");
+            } else {
+              console.warn("[PadreHomeScreen] Token registration failed:", result.message);
+            }
+          }
+        } catch (error) {
+          console.error("[PadreHomeScreen] Error registering token:", error);
+        }
+      } else {
+        console.log("[PadreHomeScreen] Not ready to register token:", {
+          isReady,
+          playerId: !!playerId,
+          subscriptionStatus,
+          hasUser: !!user?.idUsuario
+        });
+      }
+    };
+
+    registrarToken();
+  }, [isReady, playerId, subscriptionStatus, user?.idUsuario, user?.token]);
+
 
   useEffect(() => {
     const obtenerDatosPadre = async () => {
@@ -74,6 +135,7 @@ const PadreHomeScreen = () => {
     return (
       <View className="flex-1 justify-center items-center bg-white">
         <ActivityIndicator size="large" color="#0000ff" />
+        <Text className="mt-2 text-gray-600"> Configurando notificaciones...</Text>
       </View>
     );
   }
@@ -98,6 +160,24 @@ const PadreHomeScreen = () => {
     <ScrollView className="bg-blue-400">
       <View className="h-full py-6 px-6 gap-4">
         <Text className="text-2xl font-bold text-center text-sky-50">Colegio bilingüe portugués</Text>
+        
+        <View className="bg-white p-3 rounded-lg border-l-4 border-green-500">
+          <View className="flex-row items-center">
+            <View className="flex-1">
+              <Text className="text-gray-700 font-semibold">Notificaciones</Text>
+              
+              <Text className="text-gray-500 text-sm">
+                {isReady && subscriptionStatus === 'Subscribed' ? 
+                  "Configuradas correctamente" : 
+                  subscriptionStatus === 'Not Subscribed' ?
+                  "Permisos denegados - Toca para configurar" :
+                  "Configurando..."
+                }
+              </Text>
+              
+            </View>
+          </View>
+        </View>
         
         {datosPadre ? (
           <View className="bg-white p-4 rounded-lg gap-4">
@@ -155,6 +235,14 @@ const PadreHomeScreen = () => {
                     <View className="gap-1">
                       <Text className="text-gray-600 text-lg font-semibold">Tipo </Text>
                       <Text className="bg-white block rounded-lg py-2 px-2 text-gray-500 text-lg"> {datosEstudiante.tipoEstudiante} </Text>
+                    </View>
+
+                    <View className="bg-blue-50 p-3 rounded-lg border border-blue-200 mt-2">
+                      <Text className="text-blue-700 font-semibold text-center"> Notificaciones de Asistencia</Text>
+
+                      <Text className="text-blue-600 text-sm text-center mt-1">
+                        Recibirás notificaciones cuando tu hijo/a entre o salga del colegio
+                      </Text>
                     </View>
 
                   </>
