@@ -123,9 +123,11 @@ const ProfesorHomeScreen = () => {
           <Text className="text-red-500">No se encontraron datos del profesor</Text>
         )}
 
-        <TouchableOpacity className="bg-red-500 py-3 px-4 rounded-lg" onPress={logout}>
+        {/**
+         *<TouchableOpacity className="bg-red-500 py-3 px-4 rounded-lg" onPress={logout}>
           <Text className="text-white text-base font-bold text-center">Cerrar Sesión</Text>
-        </TouchableOpacity>
+          </TouchableOpacity>
+         */}
 
       </View>
     </ScrollView>

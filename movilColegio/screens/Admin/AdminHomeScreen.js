@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, TextInput, ScrollView, Modal, Image, Alert } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, Modal, Image, Alert } from "react-native";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { Ionicons } from '@expo/vector-icons';
@@ -171,23 +171,33 @@ const AdminHomeScreen = () => {
 
   };
 
+  const styles = {
+    image: {
+      width: 200,
+      height: 200,
+      resizeMode: 'contain',
+      marginTop: 0,
+      alignSelf: 'center',
+    },
+  };
+
   return (
     <ScrollView className="bg-blue-400">
       <View className="h-full py-6 px-6 gap-6"> 
 
-        <View className="flex-row items-center space-x-4 gap-3">
-            <View className="flex-auto">
-              <TextInput className="border border-gray-300 px-4 py-3 rounded-lg bg-white" placeholder="Buscar estudiante" />
-            </View>
+        <View className="flex-row items-center space-x-16 gap-3">
+            <Text className="text-2xl font-bold text-left text-sky-50">Sección: Escaneo de estudiantes</Text>
             
             <View className="">
               <TouchableOpacity className="py-3 px-3 bg-slate-500 border border-slate-200 rounded-lg"
                 onPress={()=> setMostrarEscaner(true)}
               >
-                <Ionicons name="qr-code-outline" size={18} color="white" />
+                <Ionicons name="qr-code-outline" size={20} color="white" />
               </TouchableOpacity>
             </View>
         </View>
+
+        {/**<Image source={require('../../img/ColegioFondoProfe.png')} style={styles.image} /> */}
 
         {estudianteData && (
           <View className="bg-white p-4 rounded-lg shadow">
@@ -280,9 +290,12 @@ const AdminHomeScreen = () => {
           </View>
         )}
 
-        <TouchableOpacity className="bg-red-500 py-3 px-4 rounded-lg" onPress={logout}>
+        {/**
+         *<TouchableOpacity className="bg-red-500 py-3 px-4 rounded-lg" onPress={logout}>
           <Text className="text-white text-base font-bold text-center">Cerrar Sesión</Text>
-        </TouchableOpacity>
+          </TouchableOpacity>
+         * 
+         */}
       </View>
 
       <Modal

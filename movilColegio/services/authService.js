@@ -32,9 +32,9 @@ const authService = {
       }
       return { success: false, message: "Formato inválido" };
     } catch (error) {
-      console.error("Error:", error);
-      console.error("Error response:", error.response?.data);
-      console.error("Error status:", error.response?.status);
+      //console.error("Error:", error);
+      //console.error("Error response:", error.response?.data);
+      //console.error("Error status:", error.response?.status);
       return {
         success: false,
         message: error.response?.data?.message || "Error de conexión"

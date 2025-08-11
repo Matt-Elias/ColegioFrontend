@@ -31,7 +31,7 @@ const QRReader = ({ onScan, onClose }) => {
                 const parsedData = JSON.parse(data);
                 onScan(parsedData);
             } catch (error) {
-                Alert.alert('Error', 'El código QR no contiene datos válidos');
+                Alert.alert('Error', 'Este codigo QR no contiene datos validos, porfavor escane otro');
             } finally {
                 onClose();
             }

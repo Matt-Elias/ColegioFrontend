@@ -257,9 +257,11 @@ const PadreHomeScreen = () => {
           <Text className="text-red-500">No se encontraron datos del padre</Text>
         )}
         
-        <TouchableOpacity className="bg-red-500 py-3 px-4 rounded-lg" onPress={logout}>
+        {/**
+         *<TouchableOpacity className="bg-red-500 py-3 px-4 rounded-lg" onPress={logout}>
           <Text className="text-white text-base font-bold text-center">Cerrar Sesión</Text>
-        </TouchableOpacity>
+          </TouchableOpacity>
+         */}
       </View>
     </ScrollView>
   );
