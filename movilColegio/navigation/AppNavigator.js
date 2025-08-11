@@ -24,7 +24,7 @@ const MainNavigator = () => {
           <Stack.Screen name="Login" component={LoginScreen} />
         ) : (
           <>
-            {user.role?.toUpperCase() === "ADMINISTRADOR" && (
+            {user.role?.toUpperCase() === "SUBADMIN" && (
               <Stack.Screen name="AdminDrawer" component={AdminNavigator} />
             )}
             {user.role?.toUpperCase() === "PADRE" && (

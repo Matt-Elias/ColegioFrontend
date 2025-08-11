@@ -142,7 +142,7 @@ const AdminHomeScreen = () => {
           }
 
         } catch (error) {
-          console.error("[AdminHomeScreen] Error enviando notificación:", error);
+          //console.error("[AdminHomeScreen] Error enviando notificación:", error);
           
           Alert.alert(
             "Parcialmente exitoso", 
@@ -152,13 +152,12 @@ const AdminHomeScreen = () => {
           alertMostrado = true;
         }
 
-        //  Alert.alert("Éxito", "Asistencia registrada correctamente");
         // Limpiar los datos después de registrar
         setEstudianteData(null);
         setApiData(null);
 
       } else {
-        console.error("[AdminHomeScreen] Error registrando asistencia:", result.message);
+        console.error("[AdminHomeScreen] Error registrando asistencia:", result.message); //Checarlo
         Alert.alert("Error", result.message || "No se pudo registrar la asistencia");
       }
 

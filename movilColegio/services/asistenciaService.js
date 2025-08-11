@@ -44,7 +44,7 @@ const asistenciaService = {
         message: response.data.text || 'Asistencia registrada correctamente'
       };
     } catch (error) {
-      console.error("[asistenciaService] Error detallado:", error.response?.data || error.message);
+      console.error("[asistenciaService] Error detallado:", error.response?.data || error.message); //Comentar como
       return {
         success: false,
         message: error.response?.data?.message || error.message,
