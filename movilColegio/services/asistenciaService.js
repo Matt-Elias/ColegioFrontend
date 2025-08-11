@@ -1,5 +1,5 @@
 import axios from "axios";
-const API_URL = "http://192.168.1.93:8080";
+import { API_URL } from '@env';
 
 const asistenciaService = {
   registrarDatosAsistencia: async (token, registroData) => {
