@@ -87,10 +87,14 @@ const AdminHomeScreen = () => {
 
     setCargando(true);
 
+    const ahora = new Date();
+    const fechaLocal = new Date(ahora.getTime() - (ahora.getTimezoneOffset() * 60000 ));
+
     const registroData = {
       idUsuario: user.idUsuario, // Asegúrate que el contexto de autenticación proporcione el id del usuario
       registro: tipoRegistro,
-      idEstudiante: estudianteData.estudiante.idEstudiante
+      idEstudiante: estudianteData.estudiante.idEstudiante,
+      fechaHora: fechaLocal.toISOString() // Remover la 'Z' del final
     }
 
     try {

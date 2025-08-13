@@ -101,7 +101,7 @@ const notificacionService = {
                 message: response.data.text || 'Notificación enviada correctamente'
             };
         } catch (error) {
-            //console.error("[notificacionService] Error enviando notificación:", error.response?.data || error.message);
+            console.error("[notificacionService] Error enviando notificación:", error.response?.data || error.message);
             
             // Manejar errores específicos
             let errorMessage = error.message;
