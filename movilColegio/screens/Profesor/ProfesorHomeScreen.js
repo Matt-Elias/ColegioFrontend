@@ -37,7 +37,7 @@ const ProfesorHomeScreen = () => {
         }
 
       } catch (err) {
-        console.error("[ProfesorHomeScreen] Error:", err);
+        //console.error("[ProfesorHomeScreen] Error:", err);
         setError(err.message || "Error al cargar los datos");
         
         // Si es error 401, forzar logout
@@ -64,9 +64,11 @@ const ProfesorHomeScreen = () => {
   if (error) {
     return (
       <View className="flex-1 justify-center items-center bg-white p-4">
-        <Text className="text-red-500 text-lg mb-4">Error: {error}</Text>
-        <Text className="text-gray-700 mb-2">Usuario: {user?.correoElectronico || 'No disponible'}</Text>
-        <Text className="text-gray-700 mb-4">ID: {user?.idUsuario || 'No disponible'}</Text>
+        {/**<Text className="text-red-500 text-lg mb-4">Error: {error}</Text> */}  
+        <Text className="text-red-500 text-lg mb-4 text-center">Error: El profesor, no tiene asignado una materia. Conctacte con el Administrador del colegio para que se le asigne alguna.</Text>
+        <Text className="text-gray-700 mb-2">Usuario: {user?.nombreCompleto || 'No disponible'}</Text>
+        <Text className="text-gray-700 mb-2">Correo: {user?.correoElectronico || 'No disponible'}</Text>
+        {/**<Text className="text-gray-700 mb-4">ID: {user?.idUsuario || 'No disponible'}</Text> */}
         <TouchableOpacity 
           className="mt-4 bg-blue-500 py-2 px-4 rounded-lg"
           onPress={() => logout()}

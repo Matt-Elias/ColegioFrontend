@@ -38,7 +38,7 @@ const profesorService = {
         message: response.data.text
       };
     } catch (error) {
-      console.error("[profesorService] Error detallado:", error.response?.data || error.message);
+      //console.error("[profesorService] Error detallado:", error.response?.data || error.message);
       return {
         success: false,
         message: error.response?.data?.message || error.message,
